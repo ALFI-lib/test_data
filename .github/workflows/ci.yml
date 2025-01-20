@@ -1,0 +1,23 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Install requirements
+        run: pip install -r requirements.txt
+      - name: Verify test data
+        run: ./verify_data.py
