@@ -209,7 +209,7 @@ test_cases = [
 	{ n = 6, a = -1, b = 1, ratio=10, expected = [-1, -0.99737108303933162, -0.95575857698159284, 0.95575857698159284, 0.99737108303933162, 1] },
 ]
 
-[sigmoid]
+[logistic]
 test_cases = [
 	{ n = 0, a = -1, b = 1, steepness=0.1, expected = [] },
 	{ n = 0, a = -1, b = 1, steepness=0.25, expected = [] },
@@ -262,7 +262,7 @@ test_cases = [
 	{ n = 6, a = -1, b = 1, steepness=10, expected = [-0.99990920426259513, -0.99505475368673045, -0.76159415595576489, 0.76159415595576489, 0.99505475368673045, 0.99990920426259513] },
 ]
 
-[sigmoid_stretched]
+[logistic_stretched]
 test_cases = [
 	{ n = 0, a = -1, b = 1, steepness=0.1, expected = [] },
 	{ n = 0, a = -1, b = 1, steepness=0.25, expected = [] },

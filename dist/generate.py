@@ -69,12 +69,12 @@ def ellipse_proj(n, ratio):
 	return [0] if n == 1 else [mp.sign(2*k+1 - n) / mp.sqrt(1 + (mp.tan(mp.pi * mp.mpf(k) / (n-1)) / ratio) ** 2) for k in range(n)]
 
 
-def sigmoid(n, steepness):
+def logistic(n, steepness):
 	return [0] if n == 1 else [2 / (1 + mp.exp(-steepness * (2 * mp.mpf(k) / (n-1) - 1))) - 1 for k in range(n)]
 
 
-def sigmoid_stretched(n, steepness):
-	return stretched(sigmoid(n, steepness))
+def logistic_stretched(n, steepness):
+	return stretched(logistic(n, steepness))
 
 
 def erf(n, steepness):
@@ -89,7 +89,7 @@ def generate_test_cases():
 	mapping_intervals_section = 'mapping_intervals = [\n' + '\n'.join([f'\t[{i[0]}, {i[1]}],' for i in mapping_intervals]) + '\n]'
 
 	functions = [uniform, chebyshev, chebyshev_stretched, chebyshev_ellipse, chebyshev_ellipse_stretched,
-				circle_proj, ellipse_proj, sigmoid, sigmoid_stretched, erf, erf_stretched]
+				circle_proj, ellipse_proj, logistic, logistic_stretched, erf, erf_stretched]
 	sections = []
 
 	for func in functions:
