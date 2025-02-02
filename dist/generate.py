@@ -45,6 +45,14 @@ def uniform(n):
 	return [0] if n == 1 else [2 * mp.mpf(k) / (n-1) - 1 for k in range(n)]
 
 
+def quadratic(n):
+	return [(x + 1)**2 - 1 if x <= 0 else -(x - 1)**2 + 1 for x in uniform(n)]
+
+
+def cubic(n):
+	return [-0.5 * x**3 + 1.5 * x for x in uniform(n)]
+
+
 def chebyshev(n):
 	return [-mp.cos((2*k - 1) * mp.pi / (2*n)) for k in range(1, n + 1)]
 
@@ -88,7 +96,7 @@ def erf_stretched(n, steepness):
 def generate_test_cases():
 	mapping_intervals_section = 'mapping_intervals = [\n' + '\n'.join([f'\t[{i[0]}, {i[1]}],' for i in mapping_intervals]) + '\n]'
 
-	functions = [uniform, chebyshev, chebyshev_stretched, chebyshev_ellipse, chebyshev_ellipse_stretched,
+	functions = [uniform, quadratic, cubic, chebyshev, chebyshev_stretched, chebyshev_ellipse, chebyshev_ellipse_stretched,
 				circle_proj, ellipse_proj, logistic, logistic_stretched, erf, erf_stretched]
 	sections = []
 

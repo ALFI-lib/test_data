@@ -17,6 +17,28 @@ test_cases = [
 	{ n = 6, a = -1, b = 1, expected = [-1, -0.6, -0.2, 0.2, 0.6, 1] },
 ]
 
+[quadratic]
+test_cases = [
+	{ n = 0, a = -1, b = 1, expected = [] },
+	{ n = 1, a = -1, b = 1, expected = [0] },
+	{ n = 2, a = -1, b = 1, expected = [-1, 1] },
+	{ n = 3, a = -1, b = 1, expected = [-1, 0, 1] },
+	{ n = 4, a = -1, b = 1, expected = [-1, -0.55555555555555556, 0.55555555555555556, 1] },
+	{ n = 5, a = -1, b = 1, expected = [-1, -0.75, 0, 0.75, 1] },
+	{ n = 6, a = -1, b = 1, expected = [-1, -0.84, -0.36, 0.36, 0.84, 1] },
+]
+
+[cubic]
+test_cases = [
+	{ n = 0, a = -1, b = 1, expected = [] },
+	{ n = 1, a = -1, b = 1, expected = [0] },
+	{ n = 2, a = -1, b = 1, expected = [-1, 1] },
+	{ n = 3, a = -1, b = 1, expected = [-1, 0, 1] },
+	{ n = 4, a = -1, b = 1, expected = [-1, -0.48148148148148148, 0.48148148148148148, 1] },
+	{ n = 5, a = -1, b = 1, expected = [-1, -0.6875, 0, 0.6875, 1] },
+	{ n = 6, a = -1, b = 1, expected = [-1, -0.792, -0.296, 0.296, 0.792, 1] },
+]
+
 [chebyshev]
 test_cases = [
 	{ n = 0, a = -1, b = 1, expected = [] },
