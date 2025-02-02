@@ -62,7 +62,7 @@ def chebyshev_ellipse_stretched(n, ratio):
 
 
 def circle_proj(n):
-	return [0] if n == 1 else [mp.sin(mp.pi / 2 * (2 * mp.mpf(k) / (n-1) - 1)) for k in range(n)]
+	return [mp.sin(mp.pi / 2 * x) for x in uniform(n)]
 
 
 def ellipse_proj(n, ratio):
@@ -70,7 +70,7 @@ def ellipse_proj(n, ratio):
 
 
 def logistic(n, steepness):
-	return [0] if n == 1 else [2 / (1 + mp.exp(-steepness * (2 * mp.mpf(k) / (n-1) - 1))) - 1 for k in range(n)]
+	return [2 / (1 + mp.exp(-steepness * x)) - 1 for x in uniform(n)]
 
 
 def logistic_stretched(n, steepness):
@@ -78,7 +78,7 @@ def logistic_stretched(n, steepness):
 
 
 def erf(n, steepness):
-	return [0] if n == 1 else [mp.erf(steepness * (2 * mp.mpf(k) / (n-1) - 1)) for k in range(n)]
+	return [mp.erf(steepness * x) for x in uniform(n)]
 
 
 def erf_stretched(n, steepness):
