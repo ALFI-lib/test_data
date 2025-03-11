@@ -57,6 +57,18 @@ def chebyshev(n):
 	return [-mp.cos((2*k - 1) * mp.pi / (2*n)) for k in range(1, n + 1)]
 
 
+def chebyshev_2(n):
+	return [mp.sin(mp.pi / 2 * x) for x in uniform(n)]
+
+
+def chebyshev_3(n):
+	return [mp.cos(((2*n - 1 - 2*k) * mp.pi) / (2*n - 1)) for k in range(n)]
+
+
+def chebyshev_4(n):
+	return [mp.cos(((2*n - 2 - 2*k) * mp.pi) / (2*n - 1)) for k in range(n)]
+
+
 def chebyshev_stretched(n):
 	return stretched(chebyshev(n))
 
@@ -69,12 +81,16 @@ def chebyshev_ellipse_stretched(n, ratio):
 	return stretched(chebyshev_ellipse(n, ratio))
 
 
-def circle_proj(n):
-	return [mp.sin(mp.pi / 2 * x) for x in uniform(n)]
-
-
-def ellipse_proj(n, ratio):
+def chebyshev_ellipse_2(n, ratio):
 	return [0] if n == 1 else [mp.sign(2*k+1 - n) / mp.sqrt(1 + (mp.tan(mp.pi * mp.mpf(k) / (n-1)) / ratio) ** 2) for k in range(n)]
+
+
+def chebyshev_ellipse_3(n, ratio):
+	return [(-1 if theta < mp.pi/2 else 1) / mp.sqrt(1 + (mp.tan(theta) / ratio) ** 2) for theta in (mp.pi * (2*k) / (2*n - 1) for k in range(n))]
+
+
+def chebyshev_ellipse_4(n, ratio):
+	return [(-1 if theta < mp.pi/2 else 1) / mp.sqrt(1 + (mp.tan(theta) / ratio) ** 2) for theta in (mp.pi * (2*k + 1) / (2*n - 1) for k in range(n))]
 
 
 def logistic(n, steepness):
@@ -96,8 +112,9 @@ def erf_stretched(n, steepness):
 def generate_test_cases():
 	mapping_intervals_section = 'mapping_intervals = [\n' + '\n'.join([f'\t[{i[0]}, {i[1]}],' for i in mapping_intervals]) + '\n]'
 
-	functions = [uniform, quadratic, cubic, chebyshev, chebyshev_stretched, chebyshev_ellipse, chebyshev_ellipse_stretched,
-				circle_proj, ellipse_proj, logistic, logistic_stretched, erf, erf_stretched]
+	functions = [uniform, quadratic, cubic, chebyshev, chebyshev_stretched, chebyshev_2, chebyshev_3, chebyshev_4,
+				chebyshev_ellipse, chebyshev_ellipse_stretched, chebyshev_ellipse_2, chebyshev_ellipse_3, chebyshev_ellipse_4,
+				logistic, logistic_stretched, erf, erf_stretched]
 	sections = []
 
 	for func in functions:
