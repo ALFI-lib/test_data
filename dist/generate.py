@@ -73,8 +73,16 @@ def chebyshev_3(n):
 	return [mp.cos(((2*n - 1 - 2*k) * mp.pi) / (2*n - 1)) for k in range(n)]
 
 
+def chebyshev_3_stretched(n):
+	return stretched(chebyshev_3(n))
+
+
 def chebyshev_4(n):
 	return [mp.cos(((2*n - 2 - 2*k) * mp.pi) / (2*n - 1)) for k in range(n)]
+
+
+def chebyshev_4_stretched(n):
+	return stretched(chebyshev_4(n))
 
 
 def chebyshev_ellipse(n, ratio):
@@ -97,8 +105,16 @@ def chebyshev_ellipse_3(n, ratio):
 	return [(-1 if theta < mp.pi/2 else 1) / mp.sqrt(1 + (mp.tan(theta) / ratio) ** 2) for theta in (mp.pi * (2*k) / (2*n - 1) for k in range(n))]
 
 
+def chebyshev_ellipse_3_stretched(n, ratio):
+	return stretched(chebyshev_ellipse_3(n, ratio))
+
+
 def chebyshev_ellipse_4(n, ratio):
 	return [(-1 if theta < mp.pi/2 else 1) / mp.sqrt(1 + (mp.tan(theta) / ratio) ** 2) for theta in (mp.pi * (2*k + 1) / (2*n - 1) for k in range(n))]
+
+
+def chebyshev_ellipse_4_stretched(n, ratio):
+	return stretched(chebyshev_ellipse_4(n, ratio))
 
 
 def logistic(n, steepness):
@@ -120,8 +136,10 @@ def erf_stretched(n, steepness):
 def generate_test_cases():
 	mapping_intervals_section = 'mapping_intervals = [\n' + '\n'.join([f'\t[{i[0]}, {i[1]}],' for i in mapping_intervals]) + '\n]'
 
-	functions = [uniform, quadratic, cubic, chebyshev, chebyshev_stretched, chebyshev_augmented, chebyshev_2, chebyshev_3, chebyshev_4,
-				chebyshev_ellipse, chebyshev_ellipse_stretched, chebyshev_ellipse_augmented, chebyshev_ellipse_2, chebyshev_ellipse_3, chebyshev_ellipse_4,
+	functions = [uniform, quadratic, cubic, chebyshev, chebyshev_stretched, chebyshev_augmented, chebyshev_2,
+				chebyshev_3, chebyshev_3_stretched, chebyshev_4, chebyshev_4_stretched,
+				chebyshev_ellipse, chebyshev_ellipse_stretched, chebyshev_ellipse_augmented, chebyshev_ellipse_2,
+				chebyshev_ellipse_3, chebyshev_ellipse_3_stretched, chebyshev_ellipse_4, chebyshev_ellipse_4_stretched,
 				logistic, logistic_stretched, erf, erf_stretched]
 	sections = []
 
