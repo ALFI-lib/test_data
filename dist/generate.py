@@ -163,13 +163,14 @@ def generate_test_cases():
 
 def main():
 	parser = argparse.ArgumentParser()
-	parser.add_argument('-o', '--output', type=str, help="Output file")
+	parser.add_argument('-o', '--output', type=str, help='Output file')
 	args = parser.parse_args()
+	output = generate_test_cases()
 	if not args.output:
-		print(generate_test_cases(), end='')
+		print(output, end='')
 	else:
 		with open(args.output, 'w') as file:
-			file.write(generate_test_cases())
+			file.write(output)
 
 
 if __name__ == '__main__':
