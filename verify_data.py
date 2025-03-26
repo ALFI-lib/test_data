@@ -13,3 +13,4 @@ def check_data(original, generator):
 
 check_data('dist/dist.toml', 'dist/generate.py')
 check_data('poly/poly.toml', 'poly/generate.py')
+check_data('misc/barycentric.toml', 'misc/generate.py')
