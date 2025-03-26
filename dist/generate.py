@@ -3,10 +3,10 @@ import argparse
 import inspect
 from mpmath import mp
 
-mp.dps = 100
+mp.dps = 20
 
 precision = 17
-zero_threshold = mp.mpf('1e-80')
+zero_threshold = mp.mpf('1e-18')
 
 a, b = -1, 1
 
