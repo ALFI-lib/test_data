@@ -12,3 +12,4 @@ def check_data(original, generator):
 		execute_command(['diff', original, tmpfile.name])
 
 check_data('dist/dist.toml', 'dist/generate.py')
+check_data('poly/poly.toml', 'poly/generate.py')
