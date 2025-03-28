@@ -31,10 +31,10 @@ def chebyshev_2(n):
 
 test_cases = []
 
-functions = [exp, sin, cos, f1, f2]
+functions = [f2]
 distributions = [uniform, chebyshev, chebyshev_2]
-point_counts = [7, 15, 25]
-intervals = [(-2, 2), (-10, 10)]
+point_counts = [11, 101]
+intervals = [(-10, 10)]
 
 for func in functions:
 	for dist in distributions:
@@ -59,11 +59,12 @@ def format_array(array):
 	return '[' + ', '.join(format_number(x) for x in array) + ']'
 
 
-def format_test_case(func, dist, X, Y, coeffs, xx, yy):
+def format_test_case(func, dist, type, X, Y, coeffs, xx, yy):
 	return '\n'.join([
 		'[[test_cases]]',
 		f'func = "{func.__name__}"',
 		f'dist = "{dist.__name__}"',
+		f'type = "{type}"',
 		f'X = {format_array(X)}',
 		f'Y = {format_array(Y)}',
 		f'coeffs = {format_array(coeffs)}',
@@ -73,16 +74,23 @@ def format_test_case(func, dist, X, Y, coeffs, xx, yy):
 
 
 def generate_test_case(params):
+	type = 'not-a-knot'
+
+	def extract_coefficients(spline, x_sym, X):
+		polys = [spline.args[0].expr] + [poly.expr for poly in spline.args] + [spline.args[-1].expr]
+		polys = [sp.expand(poly.subs(x_sym, x_sym + X[i])) for i, poly in enumerate(polys)]
+		return [poly.coeff(x_sym, k) for poly in polys for k in reversed(range(4))]
+
 	func, dist, n, a, b = params
 	X = stretched(dist(n), a, b)
 	Y = [func(x) for x in X]
-	x_sym = sp.symbols('x')
-	polynomial = sp.interpolate(list(zip(X, Y)), x_sym)
-	coeffs = [polynomial.coeff(x_sym, i) for i in reversed(range(n))]
-	f = sp.lambdify(x_sym, polynomial, modules='mpmath')
+	x_sym = sp.Symbol('x')
+	spline = sp.interpolating_spline(3, x_sym, X, Y)
+	coeffs = extract_coefficients(spline, x_sym, X)
+	f_spline = sp.lambdify(x_sym, spline, modules='mpmath')
 	xx = stretched(uniform(nn), a, b)
-	yy = [f(x) for x in xx]
-	return format_test_case(func, dist, X, Y, coeffs, xx, yy)
+	yy = [f_spline(x) for x in xx]
+	return format_test_case(func, dist, type, X, Y, coeffs, xx, yy)
 
 
 def generate_test_cases():

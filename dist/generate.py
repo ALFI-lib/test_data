@@ -42,7 +42,7 @@ def stretched(points):
 
 
 def uniform(n):
-	return [0] if n == 1 else [2 * mp.mpf(k) / (n-1) - 1 for k in range(n)]
+	return [mp.mpf(0)] if n == 1 else [2 * mp.mpf(k) / (n-1) - 1 for k in range(n)]
 
 
 def quadratic(n):
@@ -98,7 +98,7 @@ def chebyshev_ellipse_augmented(n, ratio):
 
 
 def chebyshev_ellipse_2(n, ratio):
-	return [0] if n == 1 else [mp.sign(2*k+1 - n) / mp.sqrt(1 + (mp.tan(mp.pi * mp.mpf(k) / (n-1)) / ratio) ** 2) for k in range(n)]
+	return [mp.mpf(0)] if n == 1 else [mp.sign(2*k+1 - n) / mp.sqrt(1 + (mp.tan(mp.pi * mp.mpf(k) / (n-1)) / ratio) ** 2) for k in range(n)]
 
 
 def chebyshev_ellipse_3(n, ratio):

@@ -2,12 +2,11 @@
 import argparse
 from concurrent.futures import ProcessPoolExecutor
 from mpmath import mp
-import sympy as sp
 
-mp.dps = 50
+mp.dps = 20
 
 precision = 17
-zero_threshold = mp.mpf('1e-40')
+zero_threshold = mp.mpf('1e-18')
 
 nn = 23
 
@@ -31,10 +30,10 @@ def chebyshev_2(n):
 
 test_cases = []
 
-functions = [exp, sin, cos, f1, f2]
+functions = [f2]
 distributions = [uniform, chebyshev, chebyshev_2]
-point_counts = [7, 15, 25]
-intervals = [(-2, 2), (-10, 10)]
+point_counts = [11]
+intervals = [(-10, 10)]
 
 for func in functions:
 	for dist in distributions:
@@ -76,12 +75,14 @@ def generate_test_case(params):
 	func, dist, n, a, b = params
 	X = stretched(dist(n), a, b)
 	Y = [func(x) for x in X]
-	x_sym = sp.symbols('x')
-	polynomial = sp.interpolate(list(zip(X, Y)), x_sym)
-	coeffs = [polynomial.coeff(x_sym, i) for i in reversed(range(n))]
-	f = sp.lambdify(x_sym, polynomial, modules='mpmath')
+	coeffs = [c for i in range(len(X) - 1) for c in [(Y[i+1]-Y[i])/(X[i+1]-X[i]), Y[i]]]
 	xx = stretched(uniform(nn), a, b)
-	yy = [f(x) for x in xx]
+	yy = []
+	cur_segment = 0
+	for x in xx:
+		while cur_segment + 1 < len(X) - 1 and X[cur_segment + 1] <= x:
+			cur_segment += 1
+		yy.append(coeffs[2*cur_segment+0] * (x - X[cur_segment]) + coeffs[2*cur_segment+1])
 	return format_test_case(func, dist, X, Y, coeffs, xx, yy)
 
 

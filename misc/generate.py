@@ -12,7 +12,7 @@ nn = 101
 
 
 def uniform(n):
-	return [0] if n == 1 else [2 * mp.mpf(k) / (n-1) - 1 for k in range(n)]
+	return [mp.mpf(0)] if n == 1 else [2 * mp.mpf(k) / (n-1) - 1 for k in range(n)]
 def chebyshev(n):
 	return [-mp.cos((2*k - 1) * mp.pi / (2*n)) for k in range(1, n + 1)]
 def chebyshev_2(n):
@@ -108,8 +108,7 @@ def generate_test_case(params):
 
 def generate_test_cases():
 	with ProcessPoolExecutor() as executor:
-		results = list(executor.map(generate_test_case, test_cases))
-	return '\n\n'.join(results)
+		return '\n\n'.join(executor.map(generate_test_case, test_cases))
 
 
 def main():
