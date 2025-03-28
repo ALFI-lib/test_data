@@ -2,12 +2,13 @@
 import argparse
 from concurrent.futures import ProcessPoolExecutor
 from mpmath import mp
-import sympy as sp
+import sys
 
-mp.dps = 50
+mp.dps = 20
 
 precision = 17
-zero_threshold = mp.mpf('1e-40')
+zero_threshold = mp.mpf('1e-18')
+float64_eps = mp.mpf(sys.float_info.epsilon)
 
 nn = 23
 
@@ -31,16 +32,18 @@ def chebyshev_2(n):
 
 test_cases = []
 
-functions = [exp, sin, cos, f1, f2]
+functions = [f2]
 distributions = [uniform, chebyshev, chebyshev_2]
-point_counts = [7, 15, 25]
-intervals = [(-2, 2), (-10, 10)]
+types = ['left', 'middle', 'right']
+point_counts = [11]
+intervals = [(-10, 10)]
 
 for func in functions:
 	for dist in distributions:
-		for n in point_counts:
-			for a, b in intervals:
-				test_cases.append((func, dist, n, a, b))
+		for type in types:
+			for n in point_counts:
+				for a, b in intervals:
+					test_cases.append((func, dist, type, n, a, b))
 
 
 def stretched(points, a, b):
@@ -59,30 +62,45 @@ def format_array(array):
 	return '[' + ', '.join(format_number(x) for x in array) + ']'
 
 
-def format_test_case(func, dist, X, Y, coeffs, xx, yy):
+def format_test_case(func, dist, type, X, Y, xx, yy):
 	return '\n'.join([
 		'[[test_cases]]',
 		f'func = "{func.__name__}"',
 		f'dist = "{dist.__name__}"',
+		f'type = "{type}"',
 		f'X = {format_array(X)}',
 		f'Y = {format_array(Y)}',
-		f'coeffs = {format_array(coeffs)}',
 		f'xx = {format_array(xx)}',
 		f'yy = {format_array(yy)}',
 	])
 
 
 def generate_test_case(params):
-	func, dist, n, a, b = params
+	func, dist, type, n, a, b = params
 	X = stretched(dist(n), a, b)
 	Y = [func(x) for x in X]
-	x_sym = sp.symbols('x')
-	polynomial = sp.interpolate(list(zip(X, Y)), x_sym)
-	coeffs = [polynomial.coeff(x_sym, i) for i in reversed(range(n))]
-	f = sp.lambdify(x_sym, polynomial, modules='mpmath')
 	xx = stretched(uniform(nn), a, b)
-	yy = [f(x) for x in xx]
-	return format_test_case(func, dist, X, Y, coeffs, xx, yy)
+	yy = []
+	cur_segment = 0
+	for x in xx:
+		while cur_segment + 1 < len(X) - 1 and X[cur_segment + 1] <= x:
+			cur_segment += 1
+		if mp.fabs(x - X[cur_segment]) < float64_eps:
+			yy.append(Y[cur_segment])
+			continue
+		if mp.fabs(x - X[cur_segment+1]) < float64_eps:
+			yy.append(Y[cur_segment+1])
+			continue
+		match type:
+			case 'left':
+				yy.append(Y[cur_segment])
+			case 'middle':
+				yy.append((Y[cur_segment] + Y[cur_segment+1]) / 2)
+			case 'right':
+				yy.append(Y[cur_segment+1])
+			case _:
+				raise ValueError(f'Unexpected type: {type!r}')
+	return format_test_case(func, dist, type, X, Y, xx, yy)
 
 
 def generate_test_cases():
