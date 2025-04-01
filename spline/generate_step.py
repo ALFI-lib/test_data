@@ -85,10 +85,10 @@ def generate_test_case(params):
 	for x in xx:
 		while cur_segment + 1 < len(X) - 1 and X[cur_segment + 1] <= x:
 			cur_segment += 1
-		if mp.fabs(x - X[cur_segment]) < float64_eps:
+		if mp.fabs(x - X[cur_segment]) <= float64_eps:
 			yy.append(Y[cur_segment])
 			continue
-		if mp.fabs(x - X[cur_segment+1]) < float64_eps:
+		if mp.fabs(x - X[cur_segment+1]) <= float64_eps:
 			yy.append(Y[cur_segment+1])
 			continue
 		match type:
