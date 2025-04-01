@@ -86,7 +86,7 @@ def barycentric(X, Y, xx, dist, epsilon):
 	for k in range(n):
 		for i, xi in enumerate(xx):
 			xdiff = xi - X[k]
-			if mp.fabs(xdiff) < epsilon:
+			if mp.fabs(xdiff) <= epsilon:
 				exact[i] = k
 			else:
 				temp = c[k] / xdiff
